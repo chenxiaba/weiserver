@@ -1,7 +1,7 @@
 # APP   : Messnote Server v0.1
 # author: chenxiaba
 # date  : 2015.07.11
-
+import os
 import tornado.ioloop
 import tornado.web
 from  tornado.web import RequestHandler
@@ -17,7 +17,7 @@ def resp(module, status=True, info=None):
 	if type(info) is dict:
 		data["info"] = json.dumps(info)
 
-	else if type(info) is str:
+	elif type(info) is str:
 		data["info"] = info
 	else:
 		raise Exception("Function<resp>: %s: Unsupport type" % module)
@@ -28,13 +28,11 @@ class MainHandler(RequestHandler):
 	def get(self):
 		data = {}
 		data["hello"] = "hello"
-		data["name"] = "word"
+		data["name"] = "weiserver"
 		self.write(data)
 
 class PeopleHandler(RequestHandler):
 	"""Handle people info"""
-		self.tag = "People"
-
 	def get(self, usr_id):
 		me = db.peoples.find(
 				{"uid" : usr_id}
@@ -43,9 +41,9 @@ class PeopleHandler(RequestHandler):
 		self.set_header("Content-Type", "application/json")
 
 		if not len(me):
-			self.write(resp(self.tag, False, "Pepole not exist."))
+			self.write(resp(self.__name__, False, "Pepole not exist."))
 
-		self.write(resp(self.tag, True, me[0]))
+		self.write(resp(self.__name__, True, me[0]))
 		pass
 
 	def post(self, usr_id):
@@ -60,19 +58,19 @@ class PeopleHandler(RequestHandler):
 				db.peoples.insert(people)
 
 				self.write(resp(
-					self.tag, True,
+					self.__name__, True,
 					{"uid": people["uid"]}
 					))
 
 			else:
 				self.write(resp(
-					self.tag, False, 
+					self.__name__, False, 
 					"Format is not right")
 				)
 		
 		# unsupport
 		self.write(resp(
-			self.tag, False, 
+			self.__name__, False, 
 			"Unsupport method")
 			)
 
@@ -117,12 +115,11 @@ class UserIdeaHandler(RequestHandler):
 
 class IdeaHandler(RequestHandler):
 	"""Handle msg of one user"""
-		self.tag = "Idea"
 	def get(self, idea_id):
 		idea = db.ideas.find({"_id": idea_id})
 		
 		if not len(idea):
-			self.write(resp(self.tag, False, "Idea not exist"))
+			self.write(resp(self.__name__, False, "Idea not exist"))
 
 		self.write(json.dumps(idea[0]))
 
@@ -132,7 +129,7 @@ class IdeaHandler(RequestHandler):
 		idea = json.loads(self.request.body)
 
 		if not checkinfo(idea):
-			self.write(resp(self.tag, False, 
+			self.write(resp(self.__name__, False, 
 				"Idea info is not right"))
 
 
@@ -143,7 +140,7 @@ class IdeaHandler(RequestHandler):
 
 		self.set_header("Content-Type", "application/json")
 		self.set_status(201)
-		self.write(resp(self.tag, True))
+		self.write(resp(self.__name__, True))
 
 	def put(self, idea_id):
 		"""Update a messge"""
@@ -156,7 +153,7 @@ class IdeaHandler(RequestHandler):
 			{"_id": ObjectId(str(idea_id))}
 			)
 		
-		self.write(resp(self.tag, True))
+		self.write(resp(self.__name__, True))
 
 	def checkinfo(self, data):
 		return True
