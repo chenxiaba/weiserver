@@ -8,6 +8,8 @@ from tornado.testing import AsyncHTTPClient
 from tornado.testing import gen_test
 from tornado.testing import main
 
+import unittest
+
 BASE_URL = "http://localhost:8888"
 
 class MainTestCase(AsyncTestCase):
@@ -18,13 +20,11 @@ class MainTestCase(AsyncTestCase):
 		client = AsyncHTTPClient(self.io_loop)
 		
 		resp = yield client.fetch(BASE_URL)
-		self.assertIn("11111", resp.body)
+		self.assertIn("hello", resp.body)
 
 
-def all():
-	return MainTestCase
-
-main()
+if __name__ == '__main__':
+	unittest.main()
 
 
 		
