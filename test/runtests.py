@@ -21,7 +21,7 @@ INDEX_URL = "http://localhost:8888"
 API_URL  = "/api/v1/"
 BASE_URL = INDEX_URL + API_URL
 
-IDEA_URL = BASE_URL + "idea"
+IDEA_URL = BASE_URL + "idea/"
 
 class MainTestCase(AsyncTestCase):
 	"""Test index"""
@@ -54,6 +54,7 @@ class IdeaTestCase(AsyncTestCase):
 		
 		resp = yield client.fetch(IDEA_URL)
 
+		print resp.body
 		self.assertIn("", resp.body)
 
 

@@ -2,6 +2,7 @@
 # author: chenxiaba
 # date  : 2015.07.11
 import os
+import json
 import tornado.ioloop
 import tornado.web
 from  tornado.web import RequestHandler
@@ -27,101 +28,21 @@ def resp(module, status=True, info=None):
 class MainHandler(RequestHandler):
 	def get(self):
 		data = {}
-		data["hello"] = "hello"
+		data["hello"] = "Hello"
 		data["name"] = "weiserver"
 		self.write(data)
 
-class PeopleHandler(RequestHandler):
-	"""Handle people info"""
-	def get(self, usr_id):
-		me = db.peoples.find(
-				{"uid" : usr_id}
-			)
-
-		self.set_header("Content-Type", "application/json")
-
-		if not len(me):
-			self.write(resp(self.__name__, False, "Pepole not exist."))
-
-		self.write(resp(self.__name__, True, me[0]))
-		pass
-
-	def post(self, usr_id):
-		if not usr_id:
-			#new people
-			people = json.loads(self.request.body)
-			
-			if self.checkinfo(people):
-				#produce a uid for people
-				people["uid"] = "*****"
-
-				db.peoples.insert(people)
-
-				self.write(resp(
-					self.__name__, True,
-					{"uid": people["uid"]}
-					))
-
-			else:
-				self.write(resp(
-					self.__name__, False, 
-					"Format is not right")
-				)
-		
-		# unsupport
-		self.write(resp(
-			self.__name__, False, 
-			"Unsupport method")
-			)
-
-
-	def put(self):
-		pass
-
-	def delete(self):
-		pass
-
-	def checkinfo(people):
-		""" Check info """
-		if not people:
-			return False
-
-		if "name" not in people:
-			return False
-
-		if "avatar" not in people:
-			return False
-
-		if "tag" not in people:
-			return False
-
-		if "info" not in people:
-			return False
-
-		return True
-
-class UserIdeaHandler(RequestHandler):
-	"""Get all ideas"""
-	def get(self, usr_id):
-		ideas = db.ideas.find(
-			{"uid": usr_id}
-			)
-
-		self.set_header("Content-Type", "application/json")
-		self.write(json.dumps(ideas))
-	
-	def post(self):
-		pass
 
 class IdeaHandler(RequestHandler):
 	"""Handle msg of one user"""
 	def get(self, idea_id):
-		idea = db.ideas.find({"_id": idea_id})
-		
-		if not len(idea):
-			self.write(resp(self.__name__, False, "Idea not exist"))
+		if idea_id:
+			idea = db.ideas.find({"_id": idea_id})
+		else:
+			idea = db.ideas.find()
 
-		self.write(json.dumps(idea[0]))
+		self.write(str(idea))
+
 
 	def post(self, usr_id):
 		""" New idea """
@@ -176,8 +97,6 @@ settings = {
 
 application = tornado.web.Application([
 		(r"/", MainHandler),
-		(r"/api/v1/people/(.*)", PeopleHandler),
-		(r"/api/v1/people/(.*)/ideas", UserIdeaHandler),
 		(r"/api/v1/idea/([0-9]*)", IdeaHandler)
 	], **settings)
 
