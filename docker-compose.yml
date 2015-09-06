@@ -1,17 +1,17 @@
 mysql:
-	image: mysql:5.6
-	environment: 
-		MYSQL_ROOT_PASSWORD: my_sql_secret
-		MYSQL_USER: chenxiaba
-		MYSQL_PASSWORD: chenxiaba
-		MYSQL_DATABASE: messnote
-	ports:
-		- "3306"
+    image: mysql:5.6
+    environment: 
+        MYSQL_ROOT_PASSWORD: my_sql_secret
+        MYSQL_USER: chenxiaba
+        MYSQL_PASSWORD: chenxiaba
+        MYSQL_DATABASE: messnote
+    ports:
+        - "3306"
 
 weiserver:
-	build: .
-	links: 
-		- mysql
-	ports:
-		- "8888:8888"
+    build: .
+    links: 
+        - mysql
+    ports:
+        - "8888:8888"
 

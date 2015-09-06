@@ -9,7 +9,7 @@ import torndb
 import tornado.ioloop
 import tornado.web
 from  tornado.web import RequestHandler
-from pymongo import MongoClient
+#from pymongo import MongoClient
 
 def resp(module, status=True, info=None):
 	""" Dump a common resp for request """
@@ -84,11 +84,11 @@ class IdeaHandler(RequestHandler):
 
 		
 # mongodb env
-MONGODB_DB_URL = os.environ.get('AWS_MONGO_DB_URL') if os.environ.get('AWS_MONGO_DB_URL') else 'mongodb://localhost:27017/'
-MONGODB_DB_NAME = os.environ.get('AWS_APP_NAME') if os.environ.get('AWS_APP_NAME') else 'messnote'
+#MONGODB_DB_URL = os.environ.get('AWS_MONGO_DB_URL') if os.environ.get('AWS_MONGO_DB_URL') else 'mongodb://localhost:27017/'
+#MONGODB_DB_NAME = os.environ.get('AWS_APP_NAME') if os.environ.get('AWS_APP_NAME') else 'messnote'
 
-client = MongoClient(MONGODB_DB_URL)
-db = client[MONGODB_DB_NAME]
+#client = MongoClient(MONGODB_DB_URL)
+#db = client[MONGODB_DB_NAME]
 
 
 settings = {
