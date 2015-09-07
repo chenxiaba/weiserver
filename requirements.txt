@@ -1,6 +1,2 @@
-bcrypt
-futures
-MySQL-python
-markdown
-tornado
-torndb
+flask
+redis
