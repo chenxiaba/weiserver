@@ -17,4 +17,4 @@ RUN pip install --trusted-host pypi.douban.com -i http://pypi.douban.com/simple 
 
 COPY . /usr/src/app
 
-CMD python weiserver.py
+CMD python app.py

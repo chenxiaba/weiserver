@@ -8,5 +8,5 @@ weiserver:
     volumes: 
         - .:/usr/src/app
     ports:
-        - "8888:5000"
+        - "5000:5000"
 
